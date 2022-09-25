@@ -19,6 +19,7 @@ O Projeto tem a finalidade de melhorar o processo de cotação, compra e envio d
 - Typescript
 - Node.js
 - Bootstrap
+- Angular 12+
 
 ---
 
