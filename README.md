@@ -38,7 +38,7 @@ O Projeto tem a finalidade de melhorar o processo de cotação, compra e envio d
 #### Clone o repositório
 git clone `https://github.com/Ivan-Vidal/case_Compugraf-front`
 
-#### acesse o projeto
+#### Acesse o projeto
 `cd dollar-delivery`
 
 #### Baixe todas as dependecias
