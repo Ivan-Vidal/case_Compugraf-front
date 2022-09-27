@@ -1,0 +1,31 @@
+/* You can add global styles to this file, and also import other style files */
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7;
+    font-family: 'Inter', sans-serif;
+}
+
+.title {
+    font-size: 2rem;
+    color: #2A2634;
+    font-weight: 900;
+}
+
+.subtitle {
+    color: #54545a;
+    font-weight: 700;
+    font-size: 1.6rem;
+}
+
+.strong {
+    font-weight: bold;
+}
+
+// overwrite sweetAlert
+
+.swal2-styled.swal2-confirm {
+    background-color: #0d6efd !important;
+    color: #ffffff;
+    outline: #0d6efd;
+}

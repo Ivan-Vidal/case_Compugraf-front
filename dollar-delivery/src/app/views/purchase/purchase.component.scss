@@ -1,0 +1,45 @@
+.shop__container {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 4px;
+    border: 1px solid #2222222c;
+    margin-top: 30px;
+}
+
+.group-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 36px;
+}
+
+@media (min-width: 768px) {
+    .shop__container {
+        margin-top: 60px;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .group-button {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 36px;
+    }
+    .home__button-clear {
+        margin-top: 0px;
+        margin-bottom: 0px;
+        max-width: 289px;
+    }
+    .home__button-convert {
+        max-width: 289px;
+    }
+    .home__button-shop {
+        max-width: 327px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
