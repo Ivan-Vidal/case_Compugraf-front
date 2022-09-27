@@ -4,6 +4,8 @@
     border-radius: 4px;
     border: 1px solid #2222222c;
     margin-top: 30px;
+    width: 100%;
+    max-width: 700px;
 }
 
 .home__subtext {
@@ -34,10 +36,21 @@
     height: 56px;
 }
 
+.home__table {
+    width: auto;
+    height: 240px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.home__img {
+    height: 30px;
+}
 @media (min-width: 768px) {
     .home__container {
         margin-top: 60px;
-        max-width: 700px;
+        max-width: 1080px;
         margin-left: auto;
         margin-right: auto;
     }
@@ -61,5 +74,14 @@
         max-width: 327px;
         margin-left: auto;
         margin-right: auto;
+    }
+    .home__table {
+        width: auto;
+        height: auto;
+    }
+}
+@media (min-width: 1000px) {
+    .home__button-shop {
+        max-width: 1080px;
     }
 }

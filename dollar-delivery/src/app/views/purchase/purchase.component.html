@@ -9,11 +9,17 @@
                     class="form-control mt-3"
                     placeholder="Nome Completo"
                     formControlName="name"
+                    minlength="6"
+                    maxlength="20"
+                    pattern="[a-zA-Z\s]+$" 
                 >
                 <input
                     class="form-control mt-3"
                     formControlName="cep"
                     placeholder="Cep da residência"
+                    minlength="8"
+                    maxlength="8"
+
                 >
                 <input 
                     class="form-control mt-3"
@@ -21,55 +27,39 @@
                     placeholder="Numero da residência"
                     formControlName="addressNumber"
                 >
-                <label class="mt-3">Qual moeda deseja comprar?</label>
-                <div class="d-flex justify-content-around mt-1">
-                    
-                    <div class="form-check">
-                        <input 
-                            class="form-check-input"
-                            value="dollar"
-                            type="radio"
-                            name="coin"
-                            id="radioDollar"
-                            formControlName="coin" 
-                        >
-                        <label 
-                            class="form-check-label"
-                           
-                        >
-                           Dólar (US$)
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input 
-                            class="form-check-input" 
-                            value="real" 
-                            type="radio" 
-                            name="coin"
-                            formControlName="coin" 
-                            id="radioReal" >
-                        <label class="form-check-label">
-                         Real (R$)
-                        </label>
-                      </div>
-                </div>
-              
+                             
                 <input 
                     class="form-control mt-3 mb-4"
                     type="number" 
-                    placeholder="Valor para contratar"
+                    placeholder="Valor em US$"
                     formControlName="value"
                 >
-                <div class="d-flex justify-content-between align-items-center">
-                    <span></span>
-                    <span *ngIf="freightValues && valueCoin === 'real'">{{  (freightValues/previousDayDollarQuote) | currency}}</span>
-                    <span *ngIf="freightValues && valueCoin === 'dollar'">{{freightValues * previousDayDollarQuote | currency: 'BRL'}}</span>
+
+                <div class="alert alert-primary mt-4 mb-4">
+                    <div class="d-flex align-items-center" >
+                        <img class="me-4 alert-warning shop__img" src="assets/imgs/icons/alert.svg" alt="">
+                         <span>
+                            Cobramos {{ 1 | currency: 'BRL'}} real por KM, no frete.
+                         </span> 
+                    </div>
+                  </div>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <span>Frete</span>
+                
+                    <span *ngIf="freightValues">
+                        {{freightValues | currency: 'BRL'}}
+                    </span>
                     <button 
+                        *ngIf="!loading"
                         class="btn btn-primary"
                         (click)="ZipCodeFilled()"
                     >
                         Verificar frete
                     </button>
+                    <button *ngIf="loading" class="btn btn-primary" type="button" disabled>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Loading...
+                      </button>
                 </div>
             </form>
          
@@ -78,28 +68,30 @@
             <div class="d-flex mt-6">
                 <h3 class="subtitle">Resumo da compra</h3>
             </div>
-            <ul>
+            <ul class="shop__list">
                 <li class="d-flex justify-content-between align-items-center">
-                    <span>Valor da compra</span>
-                    <span *ngIf="purchaseValue && valueCoin === 'real'">{{ purchaseValue/previousDayDollarQuote | currency}}</span>
-                    <span *ngIf="purchaseValue && valueCoin === 'dollar'">{{ purchaseValue * previousDayDollarQuote | currency: 'BRL'}}</span>
+                    <span>Valor da compra em reais</span>
+                    <span *ngIf="purchaseValue && totalValue !== 0">
+                        {{ purchaseValue | currency: 'BRL'}}
+                    </span>
                 </li>
             
                 <li class="d-flex justify-content-between align-items-center">
                     <span>Frete</span>
-                    <span *ngIf="freightValues && valueCoin === 'real'">{{  (freightValues/previousDayDollarQuote) | currency}}</span>
-                    <span *ngIf="freightValues && valueCoin === 'dollar'">{{ freightValues | currency: 'BRL'}}</span>
+                    <span 
+                        *ngIf="freightValues">{{ freightValues | currency: 'BRL'}}
+                    </span>
                 </li>
                 <hr>
                 <li class="d-flex justify-content-between align-items-center">
                    <span>Valor total</span>
-                   <span *ngIf=" valueCoin === 'real'" class="strong">{{ totalValue/previousDayDollarQuote | currency }}</span>
-                   <span *ngIf=" valueCoin === 'dollar'" class="strong">{{ totalValue  | currency: 'BRL'  }}</span>
+                   
+                   <span *ngIf="totalValue" class="strong">{{ totalValue  | currency: 'BRL'  }}</span>
                 </li>
             </ul>
             <div class="group-button">
-                <button class="btn btn-primary" (click)="onSubmit()">Finalizar contratação</button>
-                <button class="btn btn-outline-primary"(click)="goToBack()">Voltar</button>
+                <button class="btn btn-primary shop__button-submit" (click)="onSubmit()">Finalizar contratação</button>
+                <button class="btn btn-outline-primary shop__button-back"(click)="goToBack()">Voltar</button>
             </div>
         </div>
     </div>

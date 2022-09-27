@@ -5,13 +5,32 @@
     border: 1px solid #2222222c;
     margin-top: 30px;
 }
+.shop__img {
+    height: 30px;
+}
+
+.shop__list {
+    list-style: none;
+    padding: 0;
+}
 
 .group-button {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-bottom: 36px;
+    width: 100%;
+}
+
+.shop__button-submit {
+    height: 56px;
+    width: 100%;
+}
+
+.shop__button-back {
+   height: 56px;
+   width: 100%;
+   margin-top: 16px;
 }
 
 @media (min-width: 768px) {
@@ -21,7 +40,6 @@
         margin-left: auto;
         margin-right: auto;
     }
-
     .group-button {
         display: flex;
         flex-direction: row-reverse;
@@ -29,17 +47,11 @@
         align-items: center;
         margin-top: 36px;
     }
-    .home__button-clear {
+    .shop__button-back {
+        max-width: 289px;
         margin-top: 0px;
-        margin-bottom: 0px;
-        max-width: 289px;
     }
-    .home__button-convert {
-        max-width: 289px;
-    }
-    .home__button-shop {
+    .shop__button-submit {
         max-width: 327px;
-        margin-left: auto;
-        margin-right: auto;
     }
 }

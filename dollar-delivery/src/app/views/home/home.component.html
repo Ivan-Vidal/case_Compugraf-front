@@ -6,16 +6,15 @@
         <div>
             <div>
                 <form [formGroup]="formConvert" (ngSubmit)="convertCurrency()">
-                    <label for="" class="mt-3">Valor em dolar(USD$)</label>
+                    <label for="" class="mt-3">Valor em dolar(US$)</label>
                     <input type="number" class="form-control mb-4" id="" formControlName="dollar" placeholder="dolar">
                     <label for="">Valor em real(R$)</label>
                     <input type="number" class="form-control  mb-4" id="" formControlName="real" placeholder="real">
 
-                    <div>
-                        <span class="home__subtext" *ngIf="isConvert && isReal">Resultado da conversão é {{convertedValue | currency}} dólares</span>
-                        <span class="home__subtext" *ngIf="isConvert && isDollar">Resultado da conversão é {{convertedValue | currency: 'BRL'}} reais</span>
+                    <div *ngIf="isConvert" class="alert alert-dark" role="alert">
+                        <span class="home__subtext" *ngIf="isConvert && isReal">Resultado da conversão é <span class="text-primary">{{convertedValue | currency}} </span>dólares</span>
+                        <span class="home__subtext" *ngIf="isConvert && isDollar">Resultado da conversão é <span class="text-primary">{{convertedValue | currency :'BRL'}} </span>reais</span>
                     </div>
-
                     <div class="group-button">
                         <button class="btn btn-primary home__button-convert" type="submit">Converter</button>
                         <button class="btn btn-outline-primary home__button-clear" (click)="cleanSearch()">Limpar</button>
@@ -30,19 +29,44 @@
                 
             </div>
         </div>
-        <div  class="mt-6">
+        <div  class="mt-5">
             <div>
-                <h1 class="subtitle">Histórico de compra</h1>
+                <h1 class="subtitle mb-4">Histórico de compra</h1>
             </div>
-            <div>
-                <ul>
-                    <li>1</li>
-                    <li>1</li>
-                    <li>1</li>
-                    <li>1</li>
-                    <li>1</li>
-                    <li>1</li>
-                </ul>
+            <div *ngIf="listPurchase.length <= 0" class="alert alert-primary d-flex align-items-center" role="alert">
+                <img class="me-4 home__img" src="assets/imgs/icons/alert.svg" alt="">
+                Ainda não realizou nenhuma transação
+              </div>
+            <div *ngIf="listPurchase.length > 0" class="home__table">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nome Completo</th>
+                            <th>CEP</th>
+                            <th>Valor em doláres comprados</th>
+                            <th>Distância para frete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of listPurchase">
+                            <td>
+                                {{item.name}}
+                            </td>
+                            <td>
+                                {{item.cep}}
+                            </td>
+                            <td>
+                                {{item.value | currency}}
+                            </td>
+                            <td>
+                                {{item.freightValues| number: '1.1-2'}} Km
+                            </td>
+                        </tr>
+                    </tbody>
+                    
+                    
+                    
+                </table>
             </div>
         </div>
     </div>

@@ -1,3 +1,4 @@
+import { DbService } from './../../services/db.service';
 import { HomeService } from 'src/app/services/home.service';
 import { SweetAlertService } from './../../services/sweet-alert.service';
 import { Component, OnInit } from '@angular/core';
@@ -14,20 +15,22 @@ import Swal from 'sweetalert2';
 export class PurchaseComponent implements OnInit {
   formPriceDollar!: FormGroup
   zipCodeOrigins: string = '01228200'
-  freightValues: any
+  freightValues!: number
   address: any
-  valueCoin: any
-  purchaseValue: any
-  totalValue: any
+  valueCoin!: 'real' | 'dollar'
+  purchaseValue!: number
+  totalValue: number = 0
   dateToday = new Date()
   currentMonth!: number
   todayDay!: number
   currentYear!: number;
   previousDayDollarQuote!: number
-  lastDay: any
-  weekend: boolean
+  lastDay!: number
+  weekend: boolean;
+  zipCodeDistance: any
+  loading: boolean = false
 
-  constructor(private route: Router, private cepService: CepService, private sweetService: SweetAlertService, private homeService: HomeService) { 
+  constructor(private route: Router, private cepService: CepService, private sweetService: SweetAlertService, private homeService: HomeService, private dbService:DbService) { 
     this.weekend = this.dateToday.getDay() == 0 || this.dateToday.getDay() == 6 ? true: false
     if (this.weekend) {
       this.lastDay = 2
@@ -38,17 +41,12 @@ export class PurchaseComponent implements OnInit {
     this.todayDay = (this.dateToday.getDate() - this.lastDay)
     this.currentYear = this.dateToday.getFullYear()
 
-    console.log(this.todayDay, this.currentMonth, this.currentYear)
-
     this.homeService.getPriceLastDay(this.todayDay, this.currentMonth, this.currentYear).subscribe(response => {
-        console.log(response.value)
-
         if(response.value[0]){
           this.previousDayDollarQuote = response.value[0].cotacaoCompra
         } else {
           this.sweetService.error('Não conseguimos localizar a cotação do dia anterior','OPS!')
         }
-        console.log(this.previousDayDollarQuote)
       },
       error => {
         this.sweetService.error(error,'OPS!')
@@ -60,16 +58,15 @@ export class PurchaseComponent implements OnInit {
       name: new FormControl('',[Validators.required]),
       cep: new FormControl('',[Validators.required]),
       addressNumber: new FormControl(null,[Validators.required]),
-      coin: new FormControl(null,[Validators.required]),
       value: new FormControl(null,[Validators.required])
     })
   }
 
  async ZipCodeFilled() {
+    this.loading = true
     this.purchaseValue = this.formPriceDollar.value.value
     this.valueCoin = this.formPriceDollar.value.coin
 
-    console.log(this.formPriceDollar.value.coin)
     const cep = this.formPriceDollar.value.cep
 
     if(!!!cep) {
@@ -86,16 +83,20 @@ export class PurchaseComponent implements OnInit {
         }    
       )
       await this.calcFreightValues(cep)
-            
     }    
-    
+
+    this.loading = false
   }
   async calcFreightValues(cep: any) {
     await this.cepService.getFreightValues(this.zipCodeOrigins, cep).subscribe(
     res => {
-    this.freightValues =  res.rows[0].elements[0].distance.value
-    this.freightValues = (this.freightValues * 1.00).toFixed(2)
-    this.totalValue = (Number(this.purchaseValue) + Number(this.freightValues))
+    this.zipCodeDistance = res.rows[0].elements[0].distance
+
+    this.freightValues = ((this.zipCodeDistance.value/1000) * 1.00)
+
+    this.purchaseValue = this.purchaseValue * this.previousDayDollarQuote
+
+    this.totalValue = (this.purchaseValue + this.freightValues)
     },
     error => {
       this.sweetService.error('Não conseguimos calcular o frete no momento','OPS!')
@@ -103,7 +104,7 @@ export class PurchaseComponent implements OnInit {
   } 
 
   formFilled() {
-    if(!!!this.formPriceDollar.value.name) {
+    if(!!!this.formPriceDollar.value.name || this.formPriceDollar.value.name.valid ) {
       this.sweetService.error('Preencha o nome corretamente.','OPS!')
     } else if(!!!this.formPriceDollar.value.cep) {
       this.sweetService.error('Preencha o cep corretamente.','OPS!')
@@ -111,38 +112,24 @@ export class PurchaseComponent implements OnInit {
       this.sweetService.error('Preencha o número da residência corretamente.','OPS!')
     } else if(!!!this.formPriceDollar.value.value) {
       this.sweetService.error('Preencha o valor para comprar.','OPS!')
-    } else if(!!!this.formPriceDollar.value.coin) {
-      this.sweetService.error('Escolha uma moeda para comprar.','OPS!')
     }
-  }
-  onSubmit() {
+}
+  async onSubmit() {
     this.formFilled()
     if(this.formPriceDollar.valid) {
+      this.formPriceDollar.value.freightValues = this.freightValues;
+      this.formPriceDollar.value.purchaseValue = this.purchaseValue 
+
+
+      await  this.dbService.salveIndexedDb(this.formPriceDollar.value)
+
       this.sweetService.success('Agradecemos por comprar conosco!','Compra realizada')
-    } else [
-      this.sweetService.error('Preencha todo o formulário e tente novamente','OPS!')
-    ]
+      this.route.navigate([''])
+    } else {
+      this.sweetService.error('Preencha todo o formulário corretamente e tente novamente','OPS!')
+    }
 
   }
-
-  // indexedDB(callback: any) {
-  //   let request = indexedDB.open('ComprasRealizadas', 1);
-  //   request.onerror = console.error;
-  //   request.onsuccess = () => {
-  //     let db = request.result
-  //     callback(this.getStore(db))
-  //   }
-  //   request.onupgradeneeded = () => {
-  //     let db = request.result;
-  //     db.createObjectStore("compraRealizada", {autoIncrement: true});
-  //     callback(this.getStore(db))
-  //   }
-    
-  // }
-
-  // getStore(db: any) {
-  //   db.transaction(["compraRealizada"], "readwrite").objectStore("compraRealizada")
-  // }
 
   goToBack(): any {      
         Swal.fire({
