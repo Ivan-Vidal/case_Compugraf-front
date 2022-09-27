@@ -1,10 +1,15 @@
 # Case Compugraf
 
----
+
 
 ### Cotação e Compra de Dólar com envio por motoboy
 
+---
 
+
+## 📺 Preview
+  
+  Para ver funcionando sem preciar instalar em sua máquina, [clique aqui](case-compugraf-front-dollar-delivery-krbn.vercel.app).
 
 ## 📖 Sobre
 
@@ -12,14 +17,17 @@ O Projeto tem a finalidade de melhorar o processo de cotação, compra e envio d
 
 ---
 
-## 🚀 Tecnologias utilizadas (até o momento)
+## 🚀 Tecnologias utilizadas
 
 - HTML
-- CSS
+- CSS (Scss)
 - Typescript
 - Node.js
 - Bootstrap
-- Angular 12+
+- Angular 14+
+- DexieJS
+- Conceito Mobile Fist para responsividade
+- SweetAlert
 
 ---
 
