@@ -9,7 +9,7 @@
 
 ## 📺 Preview
   
-  Para ver funcionando sem preciar instalar em sua máquina, [clique aqui](case-compugraf-front-dollar-delivery-krbn.vercel.app).
+  Para ver funcionando sem preciar instalar em sua máquina, [clique aqui](https://case-compugraf-front-dollar-delivery-krbn.vercel.app/).
   
   ---
 
